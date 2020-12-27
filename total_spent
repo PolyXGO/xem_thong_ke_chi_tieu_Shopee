@@ -29,10 +29,10 @@ function xemBaoCaoThongKe() {
 				xemBaoCaoThongKe();
 			}
 			else {
-				console.log("%cTổng đơn hàng đã giao: "+"%c"+pxgPrice(tongDonHang)+"đơn hàng", "font-size: 26px;","font-size: 26px; color:green");
-                console.log("%cTổng sản phẩm đã đặt: " + "%c" + pxgPrice(tongSanPhamDaMua)+"sản phẩm", "font-size: 26px;","font-size: 26px; color:#fc0000");
-				console.log("%cTổng chi tiêu: "+"%c"+pxgPrice(tongTienChiTieu)+"vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
-				console.log("%cTổng tiền ship: "+"%c"+pxgPrice(tongTienVanChuyen)+"vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
+				console.log("%cTổng đơn hàng đã giao: "+"%c"+pxgPrice(tongDonHang)+" đơn hàng", "font-size: 26px;","font-size: 26px; color:green");
+                		console.log("%cTổng sản phẩm đã đặt: " + "%c" + pxgPrice(tongSanPhamDaMua)+" sản phẩm", "font-size: 26px;","font-size: 26px; color:#fc0000");
+				console.log("%cTổng chi tiêu: "+"%c"+pxgPrice(tongTienChiTieu)+" vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
+				console.log("%cTổng tiền ship: "+"%c"+pxgPrice(tongTienVanChuyen)+" vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
 			}
 		}
 	};
