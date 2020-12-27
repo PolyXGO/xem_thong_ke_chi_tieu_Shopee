@@ -1,0 +1,52 @@
+var tongDonHang = 0;
+var tongTienChiTieu = 0;
+var tongTienVanChuyen = 0;
+var tongSanPhamDaMua = 0;
+var trangThaiDonHangConKhong = true;
+var offset = 0;
+function xemBaoCaoThongKe() {
+	var orders = [];
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			orders = JSON.parse(this.responseText)['orders'];
+			tongDonHang += orders.length;
+			trangThaiDonHangConKhong = orders.length >= 10;
+			orders.forEach(order => {
+				let tpa = order["paid_amount"] / 100000;
+				tongTienChiTieu += tpa;
+				let tpsa = order["shipping_fee"] / 100000;
+                tongTienVanChuyen += tpsa;
+                order["items"].forEach(item => {
+                    let tpti = item["amount"];
+                    tongSanPhamDaMua += tpti;
+                });
+			});
+			offset += 10;
+			console.log('Đã thống kê được: ' + tongDonHang + ' đơn hàng');
+			if(trangThaiDonHangConKhong) {
+				console.log('Đang xử lý...');
+				xemBaoCaoThongKe();
+			}
+			else {
+				console.log("%cTổng đơn hàng đã giao: "+"%c"+pxgPrice(tongDonHang)+"đơn hàng", "font-size: 26px;","font-size: 26px; color:green");
+                console.log("%cTổng sản phẩm đã đặt: " + "%c" + pxgPrice(tongSanPhamDaMua)+"sản phẩm", "font-size: 26px;","font-size: 26px; color:#fc0000");
+				console.log("%cTổng chi tiêu: "+"%c"+pxgPrice(tongTienChiTieu)+"vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
+				console.log("%cTổng tiền ship: "+"%c"+pxgPrice(tongTienVanChuyen)+"vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
+			}
+		}
+	};
+	xhttp.open("GET", "https://shopee.vn/api/v1/orders/?order_type=3&offset="+offset+"&limit=10", true);
+	xhttp.send();
+}
+function pxgPrice(number, fixed=0) {
+	if(isNaN(number)) return 0;
+	number = number.toFixed(fixed);
+	let delimeter = ',';
+	number += '';
+	let rgx = /(\d+)(\d{3})/;
+	while (rgx.test(number)) {
+		number = number.replace(rgx, '$1' + delimeter + '$2');
+	}
+	return number;
+}
