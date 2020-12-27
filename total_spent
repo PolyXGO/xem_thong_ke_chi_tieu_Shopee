@@ -50,3 +50,4 @@ function pxgPrice(number, fixed=0) {
 	}
 	return number;
 }
+xemBaoCaoThongKe();
