@@ -2,6 +2,7 @@ var tongDonHang = 0;
 var tongTienDuocGiamMggShopee=0;
 var tongTienDuocGiamMggShopeeShop=0;
 var tongTienChiTieu = 0;
+var tongTienTietKiem=0;
 var tongTienHang = 0;
 var tongTienVanChuyenChuaGiam = 0;
 var tongTienVanChuyenDuocGiam = 0;
@@ -50,6 +51,7 @@ function xemBaoCaoThongKe() {
 			}
 			else {
 				tongTienHang=tongTienHang-(tongTienDuocGiamMggShopeeShop+tongTienDuocGiamMggShopee);
+				tongTienTietKiem=tongTienDuocGiamMggShopee+tongTienDuocGiamMggShopeeShop+tongTienVanChuyenDuocGiam;
 				var tongTienChiTieuX=pxgPrice(tongTienChiTieu);
 				console.log("================================");
 				console.log("%c"+PXGCert(tongTienChiTieu), "font-size:26px;");
@@ -65,6 +67,7 @@ function xemBaoCaoThongKe() {
 				console.log("%cTổng tiền vận chuyển tiết kiệm được khi dùng mã freeship shopee: "+"%c"+pxgPrice(tongTienVanChuyenDuocGiam)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
 				console.log("%cTổng tiền tiết kiệm được khi dùng MggShopee: "+"%c"+pxgPrice(tongTienDuocGiamMggShopee)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
 				console.log("%cTổng tiền tiết kiệm được khi dùng MggShopee của Shop: "+"%c"+pxgPrice(tongTienDuocGiamMggShopeeShop)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
+				console.log("%cTổng tiền tiết kiệm được: "+"%c"+pxgPrice(tongTienTietKiem)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
 				console.log("================================");
 			}
 		}
