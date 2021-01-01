@@ -28,7 +28,6 @@ function xemBaoCaoThongKe() {
 				tongTienHang+=t4;
 				let t41=order["actual_price"] / 100000;
 				tongTienChiTieu+=t41;
-				//tongTienVanChuyenPhaiTra=tongTienVanChuyenPhaiTra+(t31-t3);
 				let t2 = order["shipping_fee"] / 100000;
                 tongTienVanChuyenPhaiTra += t2;
                 order["items"].forEach(item => {
@@ -63,6 +62,7 @@ function xemBaoCaoThongKe() {
                 console.log("%cTổng tiền vận chuyển đã trả: "+"%c"+pxgPrice(tongTienVanChuyenPhaiTra)+" vnđ", "font-size: 20px;","font-size: 20px; color:#fc0000");
 				console.log("%cTổng tiền hàng + tiền ship: "+"%c"+tongTienChiTieuX+" vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
 				console.log("================================");
+				console.log("%cTổng tiền thực tế PHẢI trả nếu không dùng các loại MggShopee: "+"%c"+pxgPrice(tongTienChiTieu+tongTienTietKiem)+" vnđ", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("%cTổng tiền vận chuyển nếu không dùng mã freeship shopee: "+"%c"+pxgPrice(tongTienVanChuyenChuaGiam)+" vnđ", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("%cTổng tiền vận chuyển tiết kiệm được khi dùng mã freeship shopee: "+"%c"+pxgPrice(tongTienVanChuyenDuocGiam)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
 				console.log("%cTổng tiền tiết kiệm được khi dùng MggShopee: "+"%c"+pxgPrice(tongTienDuocGiamMggShopee)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
