@@ -45,6 +45,7 @@ function xemBaoCaoThongKe() {
 				xemBaoCaoThongKe();
 			}
 			else {
+				console.clear();
 				tongTienHangTietKiem=tongTienHang-tongTienHangGiamGia;
 				tongTienVanChuyenPhaiTra=tongTienChiTieu-tongTienHangGiamGia;
 				tongTienChiTieuX=pxgPrice(tongTienChiTieu);
