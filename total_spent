@@ -63,6 +63,7 @@ function xemBaoCaoThongKe() {
 				console.log("%c👉Shopee khung giờ: "+"%chttps://mggshopee.net", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("%c👉Lazada: "+"%chttps://mgglazada.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("%c👉Tiki: "+"%chttps://mggtiki.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
+				console.log("%c👉Fahasa: "+"%chttps://magiamgiafahasa.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("%c👉Điện Máy XANH: "+"%chttps://magiamgiadienmayxanh.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("%c👉Thế Giới Di Động: "+"%chttps://magiamgiathegioididong.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("================================");
