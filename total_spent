@@ -1,9 +1,10 @@
 var tongDonHang = 0;
 var tongTienDuocGiamMggShopee=0;
 var tongTienDuocGiamMggShopeeShop=0;
-var tongTienChiTieu = 0;
+var tongTienChiTieu = 0;/*Gồm +ship*/
+var tongTienHangGiamGia = 0;/*Chưa +ship*/
+var tongTienHang=0;/*Chưa +ship +chưa discount*/
 var tongTienTietKiem=0;
-var tongTienHang = 0;
 var tongTienVanChuyenChuaGiam = 0;
 var tongTienVanChuyenDuocGiam = 0;
 var tongSanPhamDaMua = 0;
@@ -16,74 +17,81 @@ function xemBaoCaoThongKe() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-			orders = JSON.parse(this.responseText)['orders'];
-			tongDonHang += orders.length;
-			trangThaiDonHangConKhong = orders.length >= si;
-			orders.forEach(order => {
-                let t3 = order["shipping_discount_subtotal"] / 100000;
-                tongTienVanChuyenDuocGiam += t3;
-                let t31 = order["shipping_subtotal_before_discount"] / 100000;
-                tongTienVanChuyenChuaGiam += t31;
-                let t4=order["merchandise_subtotal"] / 100000;
-				tongTienHang+=t4;
-				let t41=order["actual_price"] / 100000;
-				tongTienChiTieu+=t41;
-				let t2 = order["shipping_fee"] / 100000;
-                tongTienVanChuyenPhaiTra += t2;
-                order["items"].forEach(item => {
-                    let t5 = item["amount"];
-                    tongSanPhamDaMua += t5;
-                });
-                let t6=(order["payment_info"]["voucher_info"]["discount_by_shop_voucher"]||0)/100000;
-                tongTienDuocGiamMggShopeeShop += t6;
-                let t61=(order["payment_info"]["promotion_info"]["used_price"]||0)/100000;
-                tongTienDuocGiamMggShopeeShop += t61;
-
-                let t7=(order["payment_info"]["voucher_info"]["discount_by_shopee_voucher"]||0)/100000;
-                tongTienDuocGiamMggShopee += t7;
-			});
-			offset += si;
-			console.log('Đã thống kê được: ' + tongDonHang + ' đơn hàng');
+			orders = JSON.parse(this.responseText)['data']['details_list'];
+			if(orders!=undefined){
+				tongDonHang += orders.length;
+				trangThaiDonHangConKhong = orders.length <= si;
+				orders.forEach(order => {
+	                tongTienChiTieu +=order['info_card']['final_total'] / 100000;
+	                order['info_card']['order_list_cards'].forEach(item => {
+	                    item['items'].forEach(data => {
+							tongSanPhamDaMua += data["amount"];
+							tongTienHangGiamGia+=(data['order_price']/ 100000)*data["amount"];
+							if(data['price_before_discount']!=undefined){
+								tongTienHang+=(data['price_before_discount']/ 100000)*data["amount"];
+							}else{
+								tongTienHang+=(data['order_price']/ 100000)*data["amount"];
+							}
+						});
+	                });
+				});
+				offset += si;
+				console.log('Đã thống kê được: ' + tongDonHang + ' đơn hàng');
+			}else{
+				trangThaiDonHangConKhong=false;
+			}
 			if(trangThaiDonHangConKhong) {
-				console.log('Đợi chút tui đang xử lý...');
+				console.log('Đợi chút polyxgo đang xử lý...');
 				xemBaoCaoThongKe();
 			}
 			else {
-				tongTienHang=tongTienHang-(tongTienDuocGiamMggShopeeShop+tongTienDuocGiamMggShopee);
-				tongTienTietKiem=tongTienDuocGiamMggShopee+tongTienDuocGiamMggShopeeShop+tongTienVanChuyenDuocGiam;
-				var tongTienChiTieuX=pxgPrice(tongTienChiTieu);
+				tongTienHangTietKiem=tongTienHang-tongTienHangGiamGia;
+				tongTienVanChuyenPhaiTra=tongTienChiTieu-tongTienHangGiamGia;
+				tongTienChiTieuX=pxgPrice(tongTienChiTieu);
 				console.log("================================");
-				console.log("%c"+PXGCert(tongTienChiTieu), "font-size:26px;");
+				console.log("%c"+PXGCert(tongTienChiTieuX), "font-size:26px;");
 				console.log("%cHết có: "+"%c"+tongTienChiTieuX+" vnđ%c chứ nhiêu hì hì", "font-size: 20px;","font-size: 26px; color:red;font-weigth:700", "font-size: 20px;");
 				console.log("================================");
 				console.log("%cTổng đơn hàng đã giao: "+"%c"+pxgPrice(tongDonHang)+" đơn hàng", "font-size: 26px;","font-size: 26px; color:green");
                 console.log("%cTổng sản phẩm đã đặt: " + "%c" + pxgPrice(tongSanPhamDaMua)+" sản phẩm", "font-size: 20px;","font-size: 20px; color:#fc0000");
-                console.log("%cTổng tiền hàng: "+"%c"+pxgPrice(tongTienHang)+" vnđ", "font-size: 20px;","font-size: 20px; color:#fc0000");
-                console.log("%cTổng tiền vận chuyển đã trả: "+"%c"+pxgPrice(tongTienVanChuyenPhaiTra)+" vnđ", "font-size: 20px;","font-size: 20px; color:#fc0000");
-				console.log("%cTổng tiền hàng + tiền ship: "+"%c"+tongTienChiTieuX+" vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
+                console.log("%c💲Tổng tiền hàng: "+"%c"+pxgPrice(tongTienHangGiamGia)+" vnđ", "font-size: 20px;","font-size: 20px; color:#fc0000");
+                console.log("%c💰Tổng tiền hàng tiết kiệm: "+"%c"+pxgPrice(tongTienHangTietKiem)+" vnđ", "font-size: 20px;","font-size: 26px; color:green");
+                console.log("%c💲Tổng tiền vận chuyển đã trả: "+"%c"+pxgPrice(tongTienVanChuyenPhaiTra)+" vnđ", "font-size: 20px;","font-size: 20px; color:#fc0000");
+				console.log("%c💲Tổng tiền hàng + tiền ship: "+"%c"+tongTienChiTieuX+" vnđ", "font-size: 26px;","font-size: 26px; color:#fc0000");
 				console.log("================================");
-				console.log("%cTổng tiền thực tế PHẢI trả nếu không dùng các loại MggShopee: "+"%c"+pxgPrice(tongTienChiTieu+tongTienTietKiem)+" vnđ", "font-size: 18px;","font-size: 18px; color:#fc0000");
-				console.log("%cTổng tiền vận chuyển nếu không dùng mã freeship shopee: "+"%c"+pxgPrice(tongTienVanChuyenChuaGiam)+" vnđ", "font-size: 18px;","font-size: 18px; color:#fc0000");
-				console.log("%cTổng tiền vận chuyển tiết kiệm được khi dùng mã freeship shopee: "+"%c"+pxgPrice(tongTienVanChuyenDuocGiam)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
-				console.log("%cTổng tiền tiết kiệm được khi dùng MggShopee: "+"%c"+pxgPrice(tongTienDuocGiamMggShopee)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
-				console.log("%cTổng tiền tiết kiệm được khi dùng MggShopee của Shop: "+"%c"+pxgPrice(tongTienDuocGiamMggShopeeShop)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
-				console.log("%cTổng tiền tiết kiệm được: "+"%c"+pxgPrice(tongTienTietKiem)+" vnđ", "font-size: 18px;","font-size: 18px; color:green");
+				console.log("%c🔴Nhận mã giảm giá "+getDate()+"🔥", "font-size: 26px;");
+				console.log("%c👉Shopee khung giờ: "+"%chttps://mggshopee.net", "font-size: 18px;","font-size: 18px; color:#fc0000");
+				console.log("%c👉Lazada: "+"%chttps://mgglazada.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
+				console.log("%c👉Tiki: "+"%chttps://mggtiki.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
+				console.log("%c👉Điện Máy XANH: "+"%chttps://magiamgiadienmayxanh.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
+				console.log("%c👉Thế Giới Di Động: "+"%chttps://magiamgiathegioididong.com", "font-size: 18px;","font-size: 18px; color:#fc0000");
 				console.log("================================");
+				console.log("%c✅Xem lịch sử giá sản phẩm tăng/ giảm", "font-size: 26px;");
+				console.log("%c👉LichSuGia.vn: "+"%chttps://lichsugia.vn", "font-size: 18px;","font-size: 18px; color:#fc0000");
+				console.log("%c👉Tiện ích tra Lịch Sử Giá VN: "+"%chttps://thank.zone/LichSuGiaVNExt", "font-size: 18px;","font-size: 18px; color:#fc0000");
 			}
 		}
 	};
-	xhttp.open("GET", "https://shopee.vn/api/v1/orders/?order_type=3&offset="+offset+"&limit="+si, true);
+	xhttp.open("GET", "https://shopee.vn/api/v4/order/get_order_list?list_type=3&offset="+offset+"&limit="+si,true);
 	xhttp.send();
+}
+const getDate = () => {
+  const newDate = new Date();
+  const year = newDate.getFullYear();
+  const month = newDate.getMonth() + 1;
+  const d = newDate.getDate();
+  
+  return `${d.toString()}/${month.toString()}/${year}`;
 }
 function PXGCert(pri){
   if(pri<=10000000){
-  	return "Mình mua sắm cũng THƯỜNG ha";
+  	return "Bạn mua sắm cũng THƯỜNG ha";
   }else if(pri>10000000 &&pri<=50000000){
-  	return "Mình mua sắm cũng TÀM TẠM ha";
+  	return "Bạn mua sắm cũng TÀM TẠM ha";
   }else if(pri>50000000 &&pri<80000000){
-  	return "Mình mua sắm hơi bị KINH ĐÓ hơ";
+  	return "Bạn mua sắm hơi bị KINH ĐÓ hơ";
   }else{
-  	return "Mình là bậc thầy mua sắm, là THÁNH SHOPEE kaka";
+  	return "Bạn là bậc thầy mua sắm, là THÁNH SHOPEE kaka";
   }
 }
 function pxgPrice(number, fixed=0) {
