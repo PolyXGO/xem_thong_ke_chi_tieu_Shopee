@@ -24,7 +24,8 @@ function xemBaoCaoThongKe() {
 				orders.forEach(order => {
 	                tongTienChiTieu +=order['info_card']['final_total'] / 100000;
 	                order['info_card']['order_list_cards'].forEach(item => {
-	                    item['items'].forEach(data => {
+	                	let _items=item['product_info']['item_groups'][0];
+	                    _items['items'].forEach(data => {
 							tongSanPhamDaMua += data["amount"];
 							tongTienHangGiamGia+=(data['order_price']/ 100000)*data["amount"];
 							if(data['price_before_discount']!=undefined){
